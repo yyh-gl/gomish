@@ -17,6 +17,8 @@ const (
 	thu
 	fri
 	sat
+
+	posterImageURL = "https://github.com/yyh-gl/gomish/blob/main/img/poster.jpg?raw=true"
 )
 
 func main() {
@@ -33,22 +35,34 @@ func main() {
 }
 
 func newMessages() (messages []linebot.SendingMessage) {
-	format := "明日出せるのは\n『%s』\nです。"
+	format := "明日%s曜日に出せるのは\n『%s』\nです。"
 	
-	now := time.Now().Add(48*time.Hour)
+	now := time.Now()
 	wd := now.Weekday()
 	switch wd {
+	case sun:
+		return []linebot.SendingMessage{
+			linebot.NewTextMessage("明日月曜日に出せるごみはありません。"),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
+		}
 	case mon:
 		return []linebot.SendingMessage{
-			linebot.NewTextMessage(fmt.Sprintf(format, "燃やすごみ/燃えないごみ/スプレー缶/乾電池")),
+			linebot.NewTextMessage(fmt.Sprintf(format, "火", "燃やすごみ/燃えないごみ/スプレー缶/乾電池")),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
 		}
 	case tue:
 		return []linebot.SendingMessage{
-			linebot.NewTextMessage(fmt.Sprintf(format, "缶・びん・ペットボトル/小さな金属類")),
+			linebot.NewTextMessage(fmt.Sprintf(format, "水", "缶・びん・ペットボトル/小さな金属類")),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
+		}
+	case wed:
+		return []linebot.SendingMessage{
+			linebot.NewTextMessage("明日木曜日に出せるごみはありません。"),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
 		}
 	case thu:
 		isFirstOrThirdFri := false
-		val := (now.Day() + 1) / 7
+		val := float64(now.Day() + 1) / 7
 		if val <= 1 || val <= 3 {
 			isFirstOrThirdFri = true
 		}
@@ -58,15 +72,19 @@ func newMessages() (messages []linebot.SendingMessage) {
 			garbage += "/古紙/古布"
 		}
 		return []linebot.SendingMessage{
-			linebot.NewTextMessage(garbage),
+			linebot.NewTextMessage(fmt.Sprintf(format, "金", garbage)),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
 		}
 	case fri:
 		return []linebot.SendingMessage{
-			linebot.NewTextMessage(fmt.Sprintf(format, "燃やすごみ/燃えないごみ/スプレー缶/乾電池")),
+			linebot.NewTextMessage(fmt.Sprintf(format, "土", "燃やすごみ/燃えないごみ/スプレー缶/乾電池")),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
 		}
-	default:
+	case sat:
 		return []linebot.SendingMessage{
-			linebot.NewTextMessage("明日出せるごみはありません。"),
+			linebot.NewTextMessage("明日日曜日に出せるごみはありません。"),
+			linebot.NewImageMessage(posterImageURL, posterImageURL),
 		}
 	}
+	return nil
 }
