@@ -1,0 +1,19 @@
+name: 明日のごみ出し情報LINE通知
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 毎日 22時（JST）
+    - cron: '0 13 * * *'
+
+jobs:
+  notify:
+    name: 通知
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-go@v2
+      - run: go run main.go
+        env:
+          CHANNEL_SECRET: ${{ secrets.CHANNEL_SECRET }}
+          CHANNEL_ACCESS_TOKEN: ${{ secrets.CHANNEL_ACCESS_TOKEN }}
