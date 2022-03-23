@@ -18,7 +18,7 @@ const (
 	fri
 	sat
 
-	posterImageURL = "https://github.com/yyh-gl/gomish/blob/main/img/poster.jpg?raw=true"
+	posterImageURL = "https://images.microcms-assets.io/assets/4c6b65d46b144491a33e13e269f11289/cbf7a1a07c3e42ed941cb15567af2f4e/poster.jpg"
 )
 
 func main() {
